@@ -17,7 +17,6 @@ function App() {
     setStateLoader(true);
 
     const response = await fetch(endpoint, {
-      mode: 'no-cors',
       method: "POST",
       headers: {
         'Accept': 'application/json',
