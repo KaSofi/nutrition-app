@@ -2,6 +2,12 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Nutrition } from "./Nutrition";
 import { LoaderPage } from "./LoaderPage";
+import { Button } from "@mui/material";
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import { Ingredients } from "./Ingredients";
 
 function App() {
 
@@ -10,8 +16,7 @@ function App() {
   const [myNutrition, setMyNutrition] = useState();
   const [stateLoader, setStateLoader] = useState(false);
 
-
-  const endpoint = 'https://api.edamam.com/api/nutrition-details?app_id=0ce90b9d&app_key=cc4e3259233fa40cd19f33cab3a8422e'
+  const endpoint = 'https://api.edamam.com/api/nutrition-details?app_id=c3255b19&app_key=ac64b8f0ca4dfe1d00b2d897639454c8'
 
   const fetchData = async (ingr) => {
     setStateLoader(true);
@@ -28,13 +33,13 @@ function App() {
     if(response.ok) {
       setStateLoader(false);
       const data = await response.json();
+      console.log(data)
       setMyNutrition(data);
     } else {
       setStateLoader(false);
       alert('ingredients entered incorrectly');
     }
   }
-
 
   const finalSearch = e => {
     e.preventDefault();
@@ -48,33 +53,53 @@ function App() {
     }
   }, [wordSubmitted])
 
-
   return (
-    <div>
-      {stateLoader && <LoaderPage />}
+    <div className="NutritionContainer">
 
-      <h1>Nutrition Analysis</h1>
-      <form onSubmit={finalSearch}>
-        <input
-          placeholder="Search..."
+      {stateLoader && <LoaderPage />}
+      <h1>NITRITION ANALYSIS</h1>
+      <h4>Enter an ingredient list for what you are cooking, like <span>"1 cup rice, 10 oz chickpeas"</span>, etc.
+          Enter each ingredient on a new line.</h4>
+      <form className="FormPosition" onSubmit={finalSearch}>
+        <textarea cols="80" rows="10"
+          placeholder="1 cup rice, 10 oz chickpeas"
           onChange={(e) => setMySearch(e.target.value)}
         />
-        <button type="submit">Search</button>
+        <Button variant="contained" type="submit">Search</Button>
       </form>
       <div>
-        {
-          myNutrition && <p>{myNutrition.calories} kcal</p>
-        }
+      <div className="CaloriesBlock">
+
+          {
+            myNutrition && Object.values(myNutrition.ingredients[0].parsed)
+            .map(({ food, foodId, measure, quantity, weight, unit } ) => 
+            <div key={foodId}>
+              <Ingredients
+                food={food}
+                measure={measure}
+                quantity={quantity}
+                weight={weight}
+                unit={unit}
+            />
+            </div>
+            )
+          }
+      </div>
+
         {
           myNutrition && Object.values(myNutrition.totalNutrients)
-            .map(({ label, quantity, unit }) =>
-              <Nutrition
-                label={label}
-                quantity={quantity}
-                unit={unit}
-              />
+          
+            .map(({ label, quantity, unit }, index) =>
+            <div key={index}>
+                <Nutrition
+                  label={label}
+                  quantity={quantity.toFixed()}
+                  unit={unit}
+                />
+            </div>
             )
         }
+
       </div>
     </div>
   );
