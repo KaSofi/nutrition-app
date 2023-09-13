@@ -71,16 +71,16 @@ function App() {
       <div className="CaloriesBlock">
 
           {
-            myNutrition && Object.values(myNutrition.ingredients[0].parsed)
-            .map(({ food, foodId, measure, quantity, weight, unit } ) => 
-            <div key={foodId}>
-              <Ingredients
-                food={food}
-                measure={measure}
-                quantity={quantity}
-                weight={weight}
-                unit={unit}
-            />
+            myNutrition && myNutrition.ingredients
+            .map(( el, index ) => 
+            <div key={index} >
+            <Ingredients
+                        food={el.parsed.food}
+                        measure={el.parsed.measure}
+                        quantity={el.parsed.quantity}
+                        weight={el.parsed.weight}
+                        myNutrition={el.parsed.myNutrition}
+                />
             </div>
             )
           }
