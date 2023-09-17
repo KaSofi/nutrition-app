@@ -33,7 +33,6 @@ function App() {
     if(response.ok) {
       setStateLoader(false);
       const data = await response.json();
-      console.log(data)
       setMyNutrition(data);
     } else {
       setStateLoader(false);
