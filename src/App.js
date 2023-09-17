@@ -75,11 +75,11 @@ function App() {
             .map(( el, index ) => 
             <div key={index} >
             <Ingredients
-                        food={el.parsed.food}
-                        measure={el.parsed.measure}
-                        quantity={el.parsed.quantity}
-                        weight={el.parsed.weight}
-                        myNutrition={el.parsed.myNutrition}
+                        food={el.parsed[0].food}
+                        measure={el.parsed[0].measure}
+                        quantity={el.parsed[0].quantity}
+                        weight={el.parsed[0].weight}
+                        myNutrition={el.parsed[0].myNutrition}
                 />
             </div>
             )
